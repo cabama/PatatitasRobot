@@ -6,3 +6,6 @@ int main(){
 	std::cin >> n1 >> n2;
 	std::cout << "La suma de " << n1 << "+" << n2 << "es" << n1+n2 << std::endl;
 }
+
+
+Hello, this is a snippet.

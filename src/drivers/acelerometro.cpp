@@ -28,6 +28,8 @@
 #define MPU6050_ACCEL_ZOUT_H       0x3F   // R
 #define MPU6050_ACCEL_ZOUT_L       0x40   // R
 
+
+
  int main()
 {
     int fd = wiringPiI2CSetup(MPU6050_I2C_ADDRESS);

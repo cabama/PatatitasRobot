@@ -1,0 +1,15 @@
+# DIRECCIONES IP
+IP_MASTER="192.168.1.20" # Direccion IP de la maquina master
+IP_LOCAL="192.168.1.20"  # Direccion IP de esta maquina
+
+# CARGAMOS ROS Y EL WORKSPACE
+source /opt/ros/indigo/setup.bash
+source ~/catkin_ws/devel/setup.bash
+
+# EXPORTAMOS LAS VARIABLES DE ENTORNO
+export ROS_MASTER_URI='http://'$IP_MASTER':11311'
+export ROS_IP=$IP_LOCAL
+# export ROS_PACKAGE_PATH=/opt/ros/indigo/share:/opt/ros/indigo/stacks
+
+# Alias de ROS
+alias roscat="cd ~/catkin_ws && catkin_make && cd -"

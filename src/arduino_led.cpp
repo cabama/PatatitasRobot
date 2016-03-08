@@ -29,6 +29,7 @@ int main(int argc, char **argv)
   int count = 0;
   while (ros::ok())
   { 
+    // 
     // Creams un mensaje
     std_msgs::String msg;
     // Creamos el string

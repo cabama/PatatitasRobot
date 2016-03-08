@@ -187,3 +187,8 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+# AÑADIMOS EL EJECUTABLE
+add_executable(acelerometro_publicador src/acelerometro_publicador.cpp)
+target_link_libraries(acelerometro_publicador ${catkin_LIBRARIES})
+add_dependencies(acelerometro_publicador patatitas_generate_messages_cpp)

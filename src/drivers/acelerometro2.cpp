@@ -95,17 +95,18 @@ Espacio get_giroscopio(){
 }
 
 
+
 // Funcion main
- int main()
-{
-
-	conectamos_acelerometro();
-	Espacio aceleraciones = get_aceleraciones();
-	Espacio giroscopios   = get_giroscopio();
-
-	printf("Funcion conectada? fd = %d \n", fd);
-	printf("Aceleraciones: x=%d, y=%d, z=%d \n", aceleraciones.x, aceleraciones.y, aceleraciones.z);
-	printf("Giroscopio: x=%d, y=%d, z=%d \n", giroscopios.x, giroscopios.y, giroscopios.z);
-
-    return 0;
-}
+// int main()
+//{
+//
+//	conectamos_acelerometro();
+//	Espacio aceleraciones = get_aceleraciones();
+//	Espacio giroscopios   = get_giroscopio();
+//
+//	printf("Funcion conectada? fd = %d \n", fd);
+//	printf("Aceleraciones: x=%d, y=%d, z=%d \n", aceleraciones.x, aceleraciones.y, aceleraciones.z);
+//	printf("Giroscopio: x=%d, y=%d, z=%d \n", giroscopios.x, giroscopios.y, giroscopios.z);
+//
+//    return 0;
+//}

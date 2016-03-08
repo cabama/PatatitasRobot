@@ -1,2 +1,0 @@
-# PatatitasRobot
-Robot Project
