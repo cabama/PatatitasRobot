@@ -23,11 +23,10 @@
 
 
 // DIRECCIONES DE LOS REGISTROS I2C
-// Direccion I2C
-#define PCA9685_I2C_ADDR	0x40
+#define PCA9685_I2C_ADDR	0x40 // Direccion I2C, modificar si se ha cambiado.
 // Direccion de las configuraciones
-#define	MODE1	0x00
-#define	MODE2	0x01
+#define	MODE1		0x00
+#define	MODE2		0x01
 // Direcciones
 #define SUBADDR1	0x02
 #define SUBADDR2	0x03
@@ -67,20 +66,21 @@
  * Declaramos la Clase PWM que se encargara del control de PCA9685
  */
 
-class PWM{
+class PCA9685{
 public:
 
     // Declaramos las variables globales
     int i2c_pwm;    // Variable global que contiene el identifador del I2C - Wiring Pi
 
     // Declaramos las funciones
-    PWM();                                                          // Constructor de la clase
+	PCA9685();                                                      // Constructor de la clase
     void restart();                                                 // Reinicia el chip
     void mode1_sleep();                                             // Pone el chip en modo sleep
     void mode1_wake_up();                                           // Despierta el chip
     void set_frequency(int frecuencia);                             // Establece la frecuencia del reloj
     void set_pwm_offset(int channel, uint16_t ON, uint16_t OFF);    // Establece un canal PWM [por flancos]
 	void set_pwm_tanto(int channel, int tanto_on);    				// Establece un canal PWM [tanto por ciento]
+	int  print_mode1();
 
 };
 
@@ -97,22 +97,21 @@ public:
 /*
  * CONSTRUCTOR DE LA CLASE
  */
-PWM()
+PCA9685::PCA9685()
 {
 	// Comunicacion con PCA9685
 	i2c_pwm = wiringPiI2CSetup(PCA9685_I2C_ADDR);
 	if (i2c_pwm == -1){
-		printf("No se encontro modulo I2C\n");
-		return 0;
+		printf("No se encontro el dispositivo en esta direccion I2C: %d \n", PCA9685_I2C_ADDR);
 	}
-
 }
+
 
 /*
  * Funcion Restart -> restablece los parametros por default del dispositivo PCA9685.
  * Para ello se debe modificar el bit RESTART del registro mode1 a 1
  */
- void PWM::restart()
+ void PCA9685::restart()
  {
  	// Leemos el registro MODE1
     int mode1 = wiringPiI2CReadReg8 (i2c_pwm, MODE1);
@@ -128,7 +127,7 @@ PWM()
  * Con esto no se puede utilizar el pwm pero permite cambiar la frecuencia del prescaler
  */
 
-void PWM::mode1_sleep()
+void PCA9685::mode1_sleep()
 {
 	// Leemos el registro MODE1
     int mode1 = wiringPiI2CReadReg8 (i2c_pwm, MODE1);
@@ -143,7 +142,7 @@ void PWM::mode1_sleep()
  * Ponemos el bit SLEEP del registro del mode1 a 0.
  * Con esto despertamos el PWM, pero no se puede cambiar el valor del prescaler.
  */
-void PWM::mode1_wake_up()
+void PCA9685::mode1_wake_up()
 {
     // Leemos el registro MODE1
     int mode1 = wiringPiI2CReadReg8 (i2c_pwm, MODE1);
@@ -168,7 +167,7 @@ void PWM::mode1_wake_up()
  * Esto significa que tenemos que poner el bit SLEEP del mode1 a 1, funcion sleep antes de cambiar el valor.
  */
 
-void PWM::set_frequency(int frecuencia)
+void PCA9685::set_frequency(int frecuencia)
 {
 	// Calculamos el valor del prescaler
 	int osc_clock = 25000000;
@@ -193,7 +192,7 @@ void PWM::set_frequency(int frecuencia)
  * OFF: valor de [0-4095] más grande que ON que indica cuando la señal baja. 
  */
 
-void PWM::set_pwm_offset(int channel, uint16_t ON, uint16_t OFF)
+void PCA9685::set_pwm_offset(int channel, uint16_t ON, uint16_t OFF)
 {
 	// Calculamos los cuatro bytes a escribir.
 	uint8_t on_h = HIGHBYTE(ON);
@@ -218,7 +217,7 @@ void PWM::set_pwm_offset(int channel, uint16_t ON, uint16_t OFF)
  * Tanto: Tanto por ciento que se desea establecer la señal en ON [0-100]
  */
 
-void PWM::set_pwm_tanto(int channel, int tanto_on) {
+void PCA9685::set_pwm_tanto(int channel, int tanto_on) {
 
 	// Calculamos los flancos de ON.
 	uint16_t ON = 0;
@@ -226,4 +225,9 @@ void PWM::set_pwm_tanto(int channel, int tanto_on) {
 
 	// Llamamos a la funcion original con los datos calculados.
 	set_pwm_offset(channel,ON,OFF);
+}
+
+int PCA9685::print_mode1()
+{
+	return wiringPiI2CReadReg8 (i2c_pwm, MODE1);
 }
