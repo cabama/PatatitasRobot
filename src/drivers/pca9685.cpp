@@ -170,12 +170,7 @@ int main(int argc, char *argv[])
 
     set_pwm_offset(1,0,1000);
 
-
-
-
     //set_pwm_offset(2,0,2043);
-
-
 
     return 0;
 }
