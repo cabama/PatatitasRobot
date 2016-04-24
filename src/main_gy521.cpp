@@ -8,11 +8,24 @@
 // INCLUIMOS LAS LIBRERIAS
 #include <iostream>
 #include <unistd.h>
+#include <signal.h> // Para parar con control-c
+#include <stdlib.h>
+#include <stdio.h>
 #include "drivers/GY-521.cpp"
+
+// Para parar cuando llegue una señal ctrl-c
+volatile sig_atomic_t ctrlc = 0;
+volatile bool whiler = true;
+void my_function(int sig){ // can be called asynchronously
+  ctrlc = 1; // set flag
+}
 
 
 // FUNCION MAIN
 int main () {
+
+    // Parar con control-c
+    signal(SIGINT, my_function);
 
     // Declaramos las dos estructuras y la clase acelerometro para su control
     Espacio aceleracion, gyroscocion;
@@ -23,8 +36,14 @@ int main () {
     aceleracion = acelerometro.get_aceleraciones();
     gyroscocion = acelerometro.get_giroscopio();
 
-    // Pedimos datos por pantalla
-    printf("Aceleracion: [%d, %d, %d]\n", aceleracion.x, aceleracion.y, aceleracion.z);
-    printf("Giroscopo: [%d, %d, %d]\n", gyroscocion.x, gyroscocion.y, gyroscocion.z);
+
+    while (true){
+        if(ctrlc){
+            whiler = false;
+        }
+        printf("Aceleracion: [%d, %d, %d]\n", aceleracion.x, aceleracion.y, aceleracion.z);
+        printf("Giroscopo: [%d, %d, %d]\n", gyroscocion.x, gyroscocion.y, gyroscocion.z); 
+    }
+
 
 }

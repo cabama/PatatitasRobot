@@ -13,7 +13,7 @@ int main(){
 
     printf("Hola Mundo\n");
     PCA9685 Pwm;
-    //Pwm.restart();
+    Pwm.restart();
     //Pwm.mode1_wake_up();
     Pwm.set_frequency(1000);
     usleep(500);
@@ -22,9 +22,11 @@ int main(){
 
     int motor, velocidad;
 
-    while (true) {
+    bool ejecucion = true;
 
-        printf("\nIntroduzca el motor a mover [-1 == reset]: ");
+    while (ejecucion) {
+
+        printf("\nIntroduzca el motor a mover\n [-5 wakeup][-4 sleep] [-3 mode1] [-2 reset] [-1 Finish]: ");
         std::cin >> motor;
 
         if (motor >= 0 ) {
@@ -33,6 +35,26 @@ int main(){
             Pwm.set_pwm_offset((int) motor, 0, (int) velocidad);
         }
 
+        else if (motor == -2){
+            printf("\n RESTAURAR LA CLASE");
+            Pwm.restart();
+        }
+
+        else if (motor == -3){
+            int mode1 = Pwm.print_mode1();
+            printf("MODE 1: %d", mode1);
+        }
+
+        else if (motor == -4){
+            Pwm.mode1_sleep();
+        }
+
+        else if (motor == -5){
+            Pwm.mode1_wake_up();
+        }
+
+        else if (motor == -1)
+            ejecucion = false;
 
     }
 
