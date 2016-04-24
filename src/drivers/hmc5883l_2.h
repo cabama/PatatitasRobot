@@ -28,31 +28,3 @@
 #define HMC5883L_MODE_SINGLE     (0x01)
 
 #endif /* HMC5883L_H_ */
-
-/*
- * = = = = = = = = = = = = = = = = = 
- *	DEFINIMOS OBJECTO MENSAJE
- * = = = = = = = = = = = = = = = = = 
- */
- struct CompassMsg
- {
- 	short x;
- 	short y;
- 	short z;
- 	double angle;
- };
-
-
- /*
- * = = = = = = = = = = = = = = = = = 
- *	DEFINIMOS LA CLASE
- * = = = = = = = = = = = = = = = = = 
- */
-
- class HMC5883L{
- private:
- 	int id_i2c;
- public:
- 	void conectamos_brujula();
- 	CompassMsg getData();
- }

@@ -11,7 +11,7 @@
 #include <signal.h> // Para parar con control-c
 #include <stdlib.h>
 #include <stdio.h>
-#include "drivers/GY-521.cpp"
+#include "drivers/hmc5883l.c"
 
 // Para parar cuando llegue una señal ctrl-c
 volatile sig_atomic_t ctrlc = 0;
@@ -28,21 +28,20 @@ int main () {
     signal(SIGINT, my_function);
 
     // Declaramos las dos estructuras y la clase acelerometro para su control
-    Espacio aceleracion, gyroscocion;
-    MPU6050 acelerometro;
+    CompassMsg mensaje;
+    HMC5883L brujula;
 
     // Conectamos con el acelerometro y pedimos datos
-    acelerometro.conectamos_acelerometro();
+    brujula.conectamos_brujula();
 
 
     while (true){
         if(ctrlc){
             whiler = false;
         }
-        aceleracion = acelerometro.get_aceleraciones();
-        gyroscocion = acelerometro.get_giroscopio();
-        printf("Aceleracion: [%d, %d, %d]\n", aceleracion.x, aceleracion.y, aceleracion.z);
-        printf("Giroscopo: [%d, %d, %d]\n", gyroscocion.x, gyroscocion.y, gyroscocion.z); 
+
+        mensaje = brujula.getData();
+        printf("Magnetometro [x, y, z] = [%d, %d, %d] - Angulo = %f \n", mensaje.x, mensaje.y, mensaje.z, mensaje.angle);
     }
 
 
