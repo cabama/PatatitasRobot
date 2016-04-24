@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
+#include "geometry_msgs/Vector3.h"
 #include <sstream>
 
 /**
@@ -7,44 +7,49 @@
  */
 int main(int argc, char **argv)
 {
-  
-  // Iniciamos el nodo y le pasamos los argumentos
-  ros::init(argc, argv, "talker");
-  // NodeHandle es el principal acceso para las comunicaciones con el sistema ROS.
-  ros::NodeHandle n;
-  // Creamo el topic
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
-  // Configuramos la frecuencia de publicacion
-  ros::Rate loop_rate(10);
 
-  /**
-   * Bucle en el que publicaremos a la frecuencia indicada un mensaje por el topic
-   */
-  int count = 0;
+    // Inicializamos y registramos el nodo
+    ros::init(argc, argv, "nodo_gy521");
+    ros::NodeHandle nodo;
+    ROS_INFO("nodo_gy521: publicador giroscopio y acelerometro, creado y registrado");
+
+    // Registramos los publicadores
+    ros::Publisher publicador_acel = nodo.advertise<geometry_msgs::Vector3>("acelerometro_bruto", 0);
+    ros::Publisher publicador_gyros = nodo.advertise<geometry_msgs::Vector3>("giroscopio_bruto", 0);
+    ros::Duration seconds_sleep(0.2);
+    // Conectamos con el acelerometro
+    MPU6050 acelerometro;
+    acelerometro.conectamos_acelerometro();
+
+
+
   while (ros::ok())
   {
-    
-    // EMPAQUETAMOS EL MENSAJE
-      // Primero creamos el mensaje
-      std_msgs::String msg;
-      // Luego lo empaquetamos
-      std::stringstream ss;
-      ss << "hello world " << count;
-      msg.data = ss.str();
 
-    // Informacion que se muestra en consola hacerca del mensaje {comentar si no se debuggea}
-    ROS_INFO("%s", msg.data.c_str());
+    // Declaramos las dos estructuras y la clase acelerometro para su control
+    Espacio aceleracion, gyroscocion;
+    geometry_msgs::Vector3 aceleraciones, giroscopios;
 
-    // PUBLICAMOS EL MENSAJE
-    chatter_pub.publish(msg);
+    // Obtenemos datos del acelerometro
+    aceleracion = acelerometro.get_aceleraciones();
+    gyroscocion = acelerometro.get_giroscopio();
 
-    // Esperamos el tiempo para que se cumpla le frecuencia indicada
+    // Convertimos el mensaje tipo Espacio a ROS Geometry Vector3
+    aceleraciones.x = aceleracion.x;
+    aceleraciones.y = aceleracion.y;
+    aceleraciones.z = aceleracion.z;
+    giroscopios.x = gyroscocion.x;
+    giroscopios.y = gyroscocion.y;
+    giroscopios.z = gyroscocion.z;
+
+    //Publicamos los datos    
+    publicador_acel.publish(aceleraciones);
+    publicador_gyros.publish(giroscopios);
+
     ros::spinOnce();
-    loop_rate.sleep();
-
-    ++count;
+    seconds_sleep.sleep();
   }
 
 
   return 0;
-}
+}     
