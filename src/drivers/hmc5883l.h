@@ -53,6 +53,6 @@
  private:
  	int id_i2c;
  public:
- 	void conectamos_brujula();
- 	CompassMsg getData();
- }
+ 	int conectamos_brujula();
+ 	CompassMsg get_data();
+ };

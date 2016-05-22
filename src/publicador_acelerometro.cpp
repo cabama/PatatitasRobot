@@ -1,6 +1,10 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Vector3.h"
+#include "drivers/GY-521.cpp"
 #include <sstream>
+
+//ubuntu@ubuntu:~/catkin_ws$ g++ brujula.cpp -o example_brujula -lwiringPi -lpthread
+
 
 /**
  * This tutorial demonstrates simple sending of messages over the ROS system.

@@ -115,7 +115,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS} src/drivers
 )
 
 ## Declare a C++ library
@@ -188,7 +188,19 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+
+# AÑADIMOS LAS LIBRERIAS
+# acelerometro
+add_library(lib_acelerometro src/drivers/GY-521.cpp)
+target_link_libraries(lib_acelerometro ${catkin_LIBRARIES} pthread wiringPi)
+# brujula
+add_library(lib_brujula src/drivers/hmc5883l.cpp)
+target_link_libraries(lib_brujula ${catkin_LIBRARIES} pthread wiringPi)
+
 # AÑADIMOS EL EJECUTABLE
-add_executable(acelerometro_publicador src/acelerometro_publicador.cpp)
-target_link_libraries(acelerometro_publicador ${catkin_LIBRARIES})
-add_dependencies(acelerometro_publicador patatitas_generate_messages_cpp)
+# acelerometro
+add_executable(acelerometro_publicador src/publicador_acelerometro.cpp)
+target_link_libraries(acelerometro_publicador ${catkin_LIBRARIES} lib_acelerometro)
+#brujula
+add_executable(brujula_publicador src/publicador_brujula.cpp)
+target_link_libraries(brujula_publicador ${catkin_LIBRARIES} lib_brujula)
