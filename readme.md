@@ -5,7 +5,7 @@ Realizado por:
 - Juan Pou
 - Francisco Moreno
 - Álvaro Saez
-- Juan
+- Juan Hernandez
 
 En este proyecto se desarrolla el robot "patatitas", el cual se trata de un robot movil con cuatro motores que puede rotar sobre si mismo. Este robot esta compuesto por una Rasperry PI II, en el cual se instalado el midleware ROS.
 
