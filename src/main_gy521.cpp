@@ -1,7 +1,10 @@
 /*
- * Clase para el control de PCA9685 en ROS - PWM I2C de 16 Canales
+ * Clase para el control de acelerometro
  * Autor: Carlos Barreiro Mata
  * Email: barreymata@gmail.com
+ * 
+ * Descripcion:
+ * Este fichero se conecta a ROS y utiliza la libreria/driver que se encuentra en ./driver/GY-5221.cpp
  */
 
 
@@ -16,6 +19,8 @@
 // Para parar cuando llegue una señal ctrl-c
 volatile sig_atomic_t ctrlc = 0;
 volatile bool whiler = true;
+
+
 void my_function(int sig){ // can be called asynchronously
   ctrlc = 1; // set flag
 }
