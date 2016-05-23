@@ -1,24 +1,14 @@
 /**
  * Subscriptor_gamepad.cpp
- * Este nodo se encarga de subscribirse al topic del gamepad que se publica desde el otro PC.
- * A partir de los datos recibidos 
- */
-
-
-// LIBRERIAS.
-#include "ros/ros.h"
-#include "beginner_tutorials/mensajeTest.h"
-#include "std_msgs/Float32MultiArray.h"
-
-
-// VARIABLES GLOBALES.
-const string nodo_name = "gamepad_subscriptor";
-const string topic_name = "gamepad";
-
-
-/**
+ * - - - - - - - - - - - -
  * 
- * Estructura del mensaje GamePad.
+ * Este nodo se encarga de subscribirse al topic del gamepad que se publica desde el otro PC.
+ * A partir de los datos recibidos se aplican 
+ * Desarrollado por patatitasTeam®
+ * 
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * 
+ * Estructura del mensaje GamePad. <std_msgs/Float32MultiArray>
  * El mensaje Gamepad se trata de un array tipo Float 32, ya que con los jostick tenemos decimales.
  * A continuacion detallaremos cada una de las posiciones que ocupa en el array cada uno de los botones.
  * 
@@ -40,13 +30,40 @@ const string topic_name = "gamepad";
  * [15] -> R3.
  */
 
+// LIBRERIAS.
+#include "ros/ros.h"
+#include "beginner_tutorials/mensajeTest.h"
+#include "std_msgs/Float32MultiArray.h"
+
+
+// VARIABLES GLOBALES.
+const string nodo_name = "gamepad_subscriptor";
+const string topic_name = "gamepad";
+
+
 
 /**
  * Funcion callback a la que se accede cuando llega un dato del Gamepad.
  */
 void funcionCallback(const  std_msgs::Float32MultiArray::ConstPtr& msg){
+
+	// Desgranamos el mensaje recibido.
     Float botones[] = msg.data;
-    ROS_INFO("");
+    float jostick_left_x = botones[0];
+    float jostick_left_y = botones[1];
+    float jostick_rigth_x = botones[1];
+    float jostick_rigth_y = botones[1];
+
+    // Movemos motor izquierdo.
+
+    // Movemos motor derecho.
+
+    // Giro sobre si mismo izquierdo.
+
+    // Giro sobre si mismo derecho
+
+
+    ROS_INFO("Jostick Izquierdo Y = %d, Jostick Derecho Y = %d", jostick_left_y, jostick_rigth_y);
 }
 
 
