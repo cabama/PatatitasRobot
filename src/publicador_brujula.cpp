@@ -76,8 +76,7 @@ int main(int argc, char **argv)
     std_msgs::Float64 mensaje_ros;
     brujula_struct = brujula.get_data();
     calibracion(brujula_struct);
-    printf("Magnetometro [x, y, z] = [%d, %d, %d] - Angulo = %f \n", brujula_struct.x, brujula_struct.y, brujula_struct.z, brujula_struct.angle);
-    ROS_INFO("mensaje");
+    //printf("Magnetometro [x, y, z] = [%d, %d, %d] - Angulo = %f \n", brujula_struct.x, brujula_struct.y, brujula_struct.z, brujula_struct.angle);
     publicador.publish(mensaje_ros);
     ros::spinOnce();
     seconds_sleep.sleep();
