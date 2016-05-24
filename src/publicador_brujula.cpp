@@ -46,6 +46,7 @@ void calibracion(CompassMsg &mag){
   mag.x = new_x;
   mag.y = new_y;
   mag.z = new_z;
+  // TODO modificar el struc.angle para actualizar el header. 
 }
 
 
@@ -75,8 +76,9 @@ int main(int argc, char **argv)
 
     std_msgs::Float64 mensaje_ros;
     brujula_struct = brujula.get_data();
-    calibracion(brujula_struct);
+    //calibracion(brujula_struct);
     //printf("Magnetometro [x, y, z] = [%d, %d, %d] - Angulo = %f \n", brujula_struct.x, brujula_struct.y, brujula_struct.z, brujula_struct.angle);
+    mensaje_ros.data = brujula_struct.angle;
     publicador.publish(mensaje_ros);
     ros::spinOnce();
     seconds_sleep.sleep();
