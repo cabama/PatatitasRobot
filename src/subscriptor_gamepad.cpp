@@ -56,45 +56,78 @@ const string topic_name = "gamepad";
 PCA9685 Pwm;
 
 
+
+
+
 /**
  * @brief Con esta funcion se accede a la maquina de estados para mover el robot con el funcionamiento de los gatillos L2 y R2.
  * 
  * @param L2 informacion del estado del boton L2 del gamepad
  * @param R2 informacion del estado del boton R2 del gamepad
  */
-void programacion_gatillos(int L2, int R2)
+void programacion_gatillos(int L1, int L2, int R2)
 {
-    if (L2 == 1 && R2 == 0)
-    {
-    	Pwm.set_pwm_tanto(0, 0); 	// En el canal 0 se encuentra rueda izquierda marcha atras.
-    	Pwm.set_pwm_tanto(1, 70); 	// En el canal 1 se encuentra rueda izquierda marcha adelante.
+	if (L1 == 1)
+	{
+		Pwm.set_pwm_tanto(0, 100); 	// En el canal 0 se encuentra rueda izquierda marcha atras.
+    	Pwm.set_pwm_tanto(1, 0); 	// En el canal 1 se encuentra rueda izquierda marcha adelante.
     	Pwm.set_pwm_tanto(2, 0); 	// En el canal 2 se encuentra rueda derecha   marcha adelante.
-    	Pwm.set_pwm_tanto(3, 70); 	// En el canal 3 se encuentra rueda derecha   marcha atras.
-    }
-    else if (L2 == 0 && R2 == 1)
-    {
-    	Pwm.set_pwm_tanto(0, 70);	// En el canal 0 se encuentra rueda izquierda marcha atras.
-    	Pwm.set_pwm_tanto(1, 0);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
-    	Pwm.set_pwm_tanto(2, 70);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
-    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
-    }
-    else if (L2 == 1 && R2 == 1)
-    {
-    	Pwm.set_pwm_tanto(0, 0);	// En el canal 0 se encuentra rueda izquierda marcha atras.
-    	Pwm.set_pwm_tanto(1, 70);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
-    	Pwm.set_pwm_tanto(2, 70);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
-    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
-    }
-    else if (L2 == 0 && R2 == 0)
-    {
-    	Pwm.set_pwm_tanto(0, 0);	// En el canal 0 se encuentra rueda izquierda marcha atras.
-    	Pwm.set_pwm_tanto(1, 0);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
-    	Pwm.set_pwm_tanto(2, 0);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
-    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
+    	Pwm.set_pwm_tanto(3, 100); 	// En el canal 3 se encuentra rueda derecha   marcha atras.
 	}
+	else
+	{
+	    if (L2 == 1 && R2 == 0)
+	    {
+	    	Pwm.set_pwm_tanto(0, 0); 	// En el canal 0 se encuentra rueda izquierda marcha atras.
+	    	Pwm.set_pwm_tanto(1, 100); 	// En el canal 1 se encuentra rueda izquierda marcha adelante.
+	    	Pwm.set_pwm_tanto(2, 0); 	// En el canal 2 se encuentra rueda derecha   marcha adelante.
+	    	Pwm.set_pwm_tanto(3, 100); 	// En el canal 3 se encuentra rueda derecha   marcha atras.
+	    }
+	    else if (L2 == 0 && R2 == 1)
+	    {
+	    	Pwm.set_pwm_tanto(0, 100);	// En el canal 0 se encuentra rueda izquierda marcha atras.
+	    	Pwm.set_pwm_tanto(1, 0);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
+	    	Pwm.set_pwm_tanto(2, 100);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
+	    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
+	    }
+	    else if (L2 == 1 && R2 == 1)
+	    {
+	    	Pwm.set_pwm_tanto(0, 0);	// En el canal 0 se encuentra rueda izquierda marcha atras.
+	    	Pwm.set_pwm_tanto(1, 100);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
+	    	Pwm.set_pwm_tanto(2, 100);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
+	    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
+	    }
+	    else if (L2 == 0 && R2 == 0)
+	    {
+	    	Pwm.set_pwm_tanto(0, 0);	// En el canal 0 se encuentra rueda izquierda marcha atras.
+	    	Pwm.set_pwm_tanto(1, 0);	// En el canal 1 se encuentra rueda izquierda marcha adelante.
+	    	Pwm.set_pwm_tanto(2, 0);	// En el canal 2 se encuentra rueda derecha   marcha adelante.
+	    	Pwm.set_pwm_tanto(3, 0);	// En el canal 3 se encuentra rueda derecha   marcha atras.
+		}
+	}
+
+
 }
 
 
+
+
+void programacion_speak()
+{
+	vector<string> frases;
+
+	frases.push_back("Soy Patatitas y he venido a destruir el mundo.");
+	frases.push_back("Ey pasame unas Lais.");
+	frases.push_back("¿Eres de Kepchu o de Kapchut?");
+	frases.push_back("Quita del medio bestia inmunda.");
+
+	int num_frases = frases.size();
+	int frase_aleatoria = (rand()%num_frases)+1;
+	
+	string command = "espeak -v es \"Soy Patatitas y he venido a destruir el mundo.\" 2>/dev/null";
+    system (command.c_str());
+	//ROS_INFO("Hay %d frases programadas. A tocado la frase %d", num_frases, frase_aleatoria);
+}
 
 
 
@@ -117,14 +150,22 @@ void funcionCallback(const std_msgs::Float32MultiArray::ConstPtr& array){
     float jostick_left_y = botones[1];
     float jostick_rigth_x = botones[2];
     float jostick_rigth_y = botones[3];
+    int L1 = botones[8];
     int L2 = botones[10];
     int R2 = botones[11];
+    int triangulo = botones[4];
 
-    programacion_gatillos(L2,R2);
+    programacion_gatillos(L1,L2,R2);
+
+    if (triangulo == 1)
+    	programacion_speak();
+
 
     ROS_INFO("Jostick Izquierdo Y = %f, Jostick Derecho Y = %f", jostick_left_y, jostick_rigth_y);
     ROS_INFO("Gatillo Izquierdo Y = %d, Gatillo Derecho Y = %d", L2, R2);
 }
+
+
 
 
 /**
@@ -142,12 +183,6 @@ int main (int argc, char ** argv){
     Pwm.restart();
     Pwm.mode1_wake_up();
     Pwm.restart_values();
-	// TODO: tenemos que poner algo de tiempo con ros
-    //Pwm.set_pwm_tanto(2, 70);
-    //Pwm.set_pwm_offset((1, 0, 100);
-    //Pwm.set_pwm_offset((2, 0, 100);
-    //Pwm.set_pwm_offset((3, 0, 100);
-
 
 	// Subscribimos a gamepad
     ros::Subscriber subscriptor = nodo.subscribe(topic_name, 0, funcionCallback);
