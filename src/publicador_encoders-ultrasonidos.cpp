@@ -63,12 +63,12 @@ int main(int argc, char** argv)
 
     char* chars_array = strtok(buf, ",");
     int i=0;
-    while(chars_array)
+    while(i < 7)
     {
       if(i<=1)
-        msjEncoders.encoders[i] = atof(chars_array);
+        msjEncoders.encoders[i] = atof(chars_array[i]);
       else
-        msjUltrasonidos.ultrasonidos[i-2] = atof(chars_array);
+        msjUltrasonidos.ultrasonidos[i-2] = atof(chars_array[i]);
       i++;
     }
 
