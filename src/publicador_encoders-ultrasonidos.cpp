@@ -7,17 +7,42 @@
 #include <string>
 #include <sstream>
 #include <termios.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <errno.h>
+#include <sys/ioctl.h>
 
 using namespace std;
+
+void split(const string& s, char c,
+  vector<string>& v) {
+  string::size_type i = 0;
+  string::size_type j = s.find(c);
+
+  while (j != string::npos) {
+  v.push_back(s.substr(i, j-i));
+  i = ++j;
+  j = s.find(c, j);
+
+  if (j == string::npos)
+  v.push_back(s.substr(i, s.length()));
+  }
+}
 
 int main(int argc, char** argv)
 {
   int fd, n, i;
-  char buf[64] = "temp text";
+  char* buf;
+  char dataBuf;
   struct termios toptions;
 
 
-  ros::init(argc, argv, "Nodo publicador encoders y ultrasonidos");
+  ros::init(argc, argv, "arduinoToRaspi_nodo");
   ros::NodeHandle nodo;
   ROS_INFO("Nodo que recoge datos de Arduino y publica los valores de los encoders y los ultrasonidos");
 
@@ -29,7 +54,7 @@ int main(int argc, char** argv)
 
 
   /* open serial port */
-  fd = open("/dev/ttyACM0", O_RDWR | O_NOCTTY);
+  fd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
   printf("fd opened as %i\n", fd);
 
   /* wait for the Arduino to reboot */
@@ -50,30 +75,46 @@ int main(int argc, char** argv)
   /* commit the serial port settings */
   tcsetattr(fd, TCSANOW, &toptions);
 
-  ros::Duration rate(1);
+  //ros::Duration rate(1);
 
-  while(ros::ok())
+  while(true)
   {
-    n = read(fd, buf, 64);
+    n = read(fd, dataBuf, 1);
+
+    buf += dataBuf;
     /* insert terminating zero in the string */
-    buf[n] = 0;
+    //buf[n] = 0;
 
     /*dos primeros valores encodes, y 5 siguientes ultrasonidos*/
-    printf("%i bytes read, buffer contains: %s\n", n, buf);
 
-    char* chars_array = strtok(buf, ",");
-    int i=0;
-    while(chars_array)
+    if(dataBuf == '\n')
     {
-      if(i<=1)
-        msjEncoders.encoders[i] = atof(chars_array);
-      else
-        msjUltrasonidos.ultrasonidos[i-2] = atof(chars_array);
-      i++;
-    }
+      printf("%i bytes read, buffer contains: %s\n", n, buf);
 
-    publicadorEncoders.publish(msjEncoders); 
-    publicadorUltrasonidos.publish(msjUltrasonidos);
+      std::string str = buf;
+
+      vector<string> vectorString;
+      split(str, ',', vectorString);
+
+      //char* chars_array = strtok(buf, ",");
+      int i=0;
+      while(i<vectorString.size())
+      {
+        cout << atof(vectorString[i].c_str()) << ", ";
+        if(i<=1)
+          msjEncoders.encoders[i] = atof(vectorString[i].c_str());
+        else
+          msjUltrasonidos.ultrasonidos[i-2] = atof(vectorString[i].c_str());
+        i++;
+      }
+
+      cout << endl;
+
+      publicadorEncoders.publish(msjEncoders); 
+      publicadorUltrasonidos.publish(msjUltrasonidos);
+      
+      buf = "";
+    }
 
     ros::spinOnce();
 
