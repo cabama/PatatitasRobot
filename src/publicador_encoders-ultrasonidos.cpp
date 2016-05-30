@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 {
   int fd, n, i;
   char* buf;
-  char dataBuf;
+  char* dataBuf;
   struct termios toptions;
 
 
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
   {
     n = read(fd, dataBuf, 1);
 
-    buf += dataBuf;
+    buf += dataBuf[0];
     /* insert terminating zero in the string */
     //buf[n] = 0;
 
