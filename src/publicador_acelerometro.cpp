@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     calibracion(gyroscocion);
 
     // Obtenemos rumbo mediante el giroscopio
-    gyro_header.data += gyroscocion.z;
+    gyro_header.data += 0.2*gyroscocion.z;
 
     // Convertimos el mensaje tipo Espacio a ROS Geometry Vector3
     aceleraciones.x = aceleracion.x;

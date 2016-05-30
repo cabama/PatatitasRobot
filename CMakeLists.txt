@@ -138,9 +138,9 @@ add_executable(encodersUltrasonidos_nodo src/publicador_encoders-ultrasonidos.cp
 # add_dependencies(patatitas_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(patatitas_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(encodersUltrasonidos_nodo
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##

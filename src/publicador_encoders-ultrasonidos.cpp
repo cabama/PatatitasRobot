@@ -42,7 +42,7 @@ int main(int argc, char** argv)
   struct termios toptions;
 
 
-  ros::init(argc, argv, "arduinoToRaspi_nodo");
+  ros::init(argc, argv, "arduinoToRaspi");
   ros::NodeHandle nodo;
   ROS_INFO("Nodo que recoge datos de Arduino y publica los valores de los encoders y los ultrasonidos");
 
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
       buf = "";
     }
 
-    //ros::spinOnce();
+    ros::spinOnce();
 
     //rate.sleep();
   }
