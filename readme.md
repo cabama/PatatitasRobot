@@ -28,3 +28,8 @@ En este proyecto se desarrolla el robot "patatitas", el cual se trata de un robo
 ## Topics:
 
 En este apartado se deberán de añadir los topics del robot patatitas.
+
+- - -
+## Posibles Fallos
+
+Si no funciona la conexion del gamepad con el robot, donde solamente se ve el topic pero no se recibe ningun dato se debe a la configuracion del ethernet en Parallels ya que con la IP virtual no se consigue acceder desde fuera a Ubuntu virtualizado.

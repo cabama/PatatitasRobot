@@ -196,11 +196,17 @@ target_link_libraries(lib_acelerometro ${catkin_LIBRARIES} pthread wiringPi)
 # brujula
 add_library(lib_brujula src/drivers/hmc5883l.cpp)
 target_link_libraries(lib_brujula ${catkin_LIBRARIES} pthread wiringPi)
+# PWM
+add_library(lib_pwm src/drivers/pca9685.cpp)
+target_link_libraries(lib_pwm ${catkin_LIBRARIES} pthread wiringPi)
 
-# AÑADIMOS EL EJECUTABLE
+# AÑADIMOS LOS EJECUTABLES
 # acelerometro
 add_executable(acelerometro_publicador src/publicador_acelerometro.cpp)
 target_link_libraries(acelerometro_publicador ${catkin_LIBRARIES} lib_acelerometro)
 #brujula
 add_executable(brujula_publicador src/publicador_brujula.cpp)
 target_link_libraries(brujula_publicador ${catkin_LIBRARIES} lib_brujula)
+# Subscriptor al gamepad (pwm)
+add_executable(gamepad_subscriptor src/subscriptor_gamepad.cpp)
+target_link_libraries(gamepad_subscriptor ${catkin_LIBRARIES} lib_pwm)

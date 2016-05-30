@@ -75,6 +75,7 @@ public:
     // Declaramos las funciones
     PCA9685();                                                      // Constructor de la clase
     void restart();                                                 // Reinicia el chip
+    void restart_values();                                          // Reinicia los valores de los canales PWM.
     void mode1_sleep();                                             // Pone el chip en modo sleep
     void mode1_wake_up();                                           // Despierta el chip
     void set_frequency(int frecuencia);                             // Establece la frecuencia del reloj
@@ -120,6 +121,20 @@ PCA9685::PCA9685()
     // Escribimos estos cambios en el registro
     wiringPiI2CWriteReg8 (i2c_pwm, MODE1, MODE1_RESTART);
 
+ }
+
+
+ /*
+  * Funcion Chapucera.
+  * Con esta funcion como parece que el restart no funciona bien, 
+  * se pondran todos los canales a 0 de forma bruta.
+  */
+ void PCA9685::restart_values()
+ {
+    for (int i=0; i<16; i++)
+    {
+        set_pwm_tanto(i,0);
+    }
  }
 
 
