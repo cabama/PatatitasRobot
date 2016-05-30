@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     // Declaramos el yaw a calcular mediante el giroscopio
     std_msgs::Float64 gyro_header;
     // Inicializamos el rumbo del acelerómetro (º/s)
-    gyro_header = 0;
+    gyro_header.data = 0;
 
     // Calculamos el offset con las primeras 500 primeras muestras del giroscopio
     for (int i=0; i < 500; ++i){
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     calibracion(gyroscocion);
 
     // Obtenemos rumbo mediante el giroscopio
-    gyro_header.data += giroscocion.z;
+    gyro_header.data += gyroscocion.z;
 
     // Convertimos el mensaje tipo Espacio a ROS Geometry Vector3
     aceleraciones.x = aceleracion.x;
