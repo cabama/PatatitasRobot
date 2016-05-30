@@ -29,9 +29,9 @@ void calcular_ofset(Espacio &gyroscocion){
  */
 void calibracion(Espacio &gyroscocion){
 
-  gyroscocion.x = (giroscocion.x - bias[0])/sgyro;
-  gyroscocion.y = (giroscocion.y - bias[1])/sgyro;
-  gyroscocion.z = (giroscocion.z - bias[2])/sgyro;
+  gyroscocion.x = (gyroscocion.x - bias[0])/sgyro;
+  gyroscocion.y = (gyroscocion.y - bias[1])/sgyro;
+  gyroscocion.z = (gyroscocion.z - bias[2])/sgyro;
   // TODO modificar el struc.angle para actualizar el header. 
 }
 
