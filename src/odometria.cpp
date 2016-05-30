@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float32MultyArray.h>
 #include <patatitas/encoders.h>
 
 using namespace std;
