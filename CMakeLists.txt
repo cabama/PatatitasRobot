@@ -212,3 +212,6 @@ target_link_libraries(brujula_publicador ${catkin_LIBRARIES} lib_brujula)
 # Subscriptor al gamepad (pwm)
 add_executable(gamepad_subscriptor src/subscriptor_gamepad.cpp)
 target_link_libraries(gamepad_subscriptor ${catkin_LIBRARIES} lib_pwm)
+# Odometria
+add_executable(odometria src/odometria.cpp)
+target_link_libraries(odometria ${catkin_LIBRARIES})
