@@ -29,7 +29,7 @@ unsigned long tiempo;
 int i = 0;
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     
     delay(100);
     pinMode(2,INPUT);
@@ -61,83 +61,68 @@ void right_interrupt(){
 
 void loop() {
     
-    Serial.print(left_encoder_count);
+    Serial.print(100);
     Serial.print(",");
-    Serial.print(right_encoder_count);
+    Serial.print(150);
     Serial.print(",");
     
-    if (i==0){
-        digitalWrite(ULTRASOUND_1_OUT,LOW);
-        delayMicroseconds(5);
-        digitalWrite(ULTRASOUND_1_OUT,HIGH);
-        delayMicroseconds(10);
-        digitalWrite(ULTRASOUND_1_OUT,LOW);
-        tiempo=pulseIn(ULTRASOUND_1_IN,HIGH);
-        distancia=(0.017*tiempo);
-        //Serial.print("DistanciaHastaEncoder1: ");
-        Serial.print(distancia);
-        //Serial.println(" cm");
-        //delay(100);
-        i=1;
-    }
-    
-    if (i==1){
-        digitalWrite(ULTRASOUND_2_OUT,LOW);
-        delayMicroseconds(5);
-        digitalWrite(ULTRASOUND_2_OUT,HIGH);
-        delayMicroseconds(10);
-        digitalWrite(ULTRASOUND_2_OUT,LOW);
-        tiempo=pulseIn(ULTRASOUND_2_IN,HIGH);
-        distancia=(0.017*tiempo);
-        Serial.print(",");
-        Serial.print(distancia);
-        //Serial.println(" cm");
-        //delay(100);
-        i=2;
-    }
+    digitalWrite(ULTRASOUND_1_OUT,LOW);
+    delayMicroseconds(5);
+    digitalWrite(ULTRASOUND_1_OUT,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(ULTRASOUND_1_OUT,LOW);
+    tiempo=pulseIn(ULTRASOUND_1_IN,HIGH);
+    distancia=(0.017*tiempo);
+    //Serial.print("DistanciaHastaEncoder1: ");
+    Serial.print(distancia);
+    //Serial.println(" cm");
+    //delay(100);
 
-    if (i==2){
-        digitalWrite(ULTRASOUND_3_OUT,LOW);
-        delayMicroseconds(5);
-        digitalWrite(ULTRASOUND_3_OUT,HIGH);
-        delayMicroseconds(10);
-        digitalWrite(ULTRASOUND_3_OUT,LOW);
-        tiempo=pulseIn(ULTRASOUND_3_IN,HIGH);
-        distancia=(0.017*tiempo);
-        Serial.print(",");
-        Serial.print(distancia);
-        //Serial.println(" cm");
-        //delay(100);
-        i=3;
-    }
+    digitalWrite(ULTRASOUND_2_OUT,LOW);
+    delayMicroseconds(5);
+    digitalWrite(ULTRASOUND_2_OUT,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(ULTRASOUND_2_OUT,LOW);
+    tiempo=pulseIn(ULTRASOUND_2_IN,HIGH);
+    distancia=(0.017*tiempo);
+    Serial.print(",");
+    Serial.print(distancia);
+    //Serial.println(" cm");
+    //delay(100);
 
-    if (i==3){
-        digitalWrite(ULTRASOUND_4_OUT,LOW);
-        delayMicroseconds(5);
-        digitalWrite(ULTRASOUND_4_OUT,HIGH);
-        delayMicroseconds(10);
-        digitalWrite(ULTRASOUND_4_OUT,LOW);
-        tiempo=pulseIn(ULTRASOUND_4_IN,HIGH);
-        distancia=(0.017*tiempo);
-        Serial.print(",");
-        Serial.print(distancia);
-        //Serial.println(" cm");
-        //delay(100);
-        i=3;
-    }
+    digitalWrite(ULTRASOUND_3_OUT,LOW);
+    delayMicroseconds(5);
+    digitalWrite(ULTRASOUND_3_OUT,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(ULTRASOUND_3_OUT,LOW);
+    tiempo=pulseIn(ULTRASOUND_3_IN,HIGH);
+    distancia=(0.017*tiempo);
+    Serial.print(",");
+    Serial.print(distancia);
+    //Serial.println(" cm");
+    //delay(100);
 
-    if (i==3){
-        digitalWrite(ULTRASOUND_5_OUT,LOW);
-        delayMicroseconds(5);
-        digitalWrite(ULTRASOUND_5_OUT,HIGH);
-        delayMicroseconds(10);
-        digitalWrite(ULTRASOUND_5_OUT,LOW);
-        tiempo=pulseIn(ULTRASOUND_5_IN,HIGH);
-        distancia=(0.017*tiempo);
-        Serial.print(",");
-        Serial.println(distancia);
-        //Serial.println(" cm");
-        //delay(100);
-        i=0;
-    }
+    digitalWrite(ULTRASOUND_4_OUT,LOW);
+    delayMicroseconds(5);
+    digitalWrite(ULTRASOUND_4_OUT,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(ULTRASOUND_4_OUT,LOW);
+    tiempo=pulseIn(ULTRASOUND_4_IN,HIGH);
+    distancia=(0.017*tiempo);
+    Serial.print(",");
+    Serial.print(distancia);
+    //Serial.println(" cm");
+    //delay(100);
+
+    digitalWrite(ULTRASOUND_5_OUT,LOW);
+    delayMicroseconds(5);
+    digitalWrite(ULTRASOUND_5_OUT,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(ULTRASOUND_5_OUT,LOW);
+    tiempo=pulseIn(ULTRASOUND_5_IN,HIGH);
+    distancia=(0.017*tiempo);
+    Serial.print(",");
+    Serial.println(distancia);
+    //Serial.println(" cm");
+    //delay(100);
 }
