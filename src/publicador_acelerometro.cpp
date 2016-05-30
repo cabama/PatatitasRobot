@@ -29,9 +29,9 @@ void calcular_ofset(Espacio &gyroscocion){
  */
 void calibracion(Espacio &gyroscocion){
 
-  gyroscocion.x = (giroscocion.x - bias[0])/sgyro;
-  gyroscocion.y = (giroscocion.y - bias[1])/sgyro;
-  gyroscocion.z = (giroscocion.z - bias[2])/sgyro;
+  gyroscocion.x = (gyroscocion.x - bias[0])/sgyro;
+  gyroscocion.y = (gyroscocion.y - bias[1])/sgyro;
+  gyroscocion.z = (gyroscocion.z - bias[2])/sgyro;
   // TODO modificar el struc.angle para actualizar el header. 
 }
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     // Declaramos el yaw a calcular mediante el giroscopio
     std_msgs::Float64 gyro_header;
     // Inicializamos el rumbo del acelerómetro (º/s)
-    gyro_header = 0;
+    gyro_header.data = 0;
 
     // Calculamos el offset con las primeras 500 primeras muestras del giroscopio
     for (int i=0; i < 500; ++i){
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     calibracion(gyroscocion);
 
     // Obtenemos rumbo mediante el giroscopio
-    gyro_header.data += giroscocion.z;
+    gyro_header.data += gyroscocion.z;
 
     // Convertimos el mensaje tipo Espacio a ROS Geometry Vector3
     aceleraciones.x = aceleracion.x;
