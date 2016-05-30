@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 
     /*dos primeros valores encodes, y 5 siguientes ultrasonidos*/
 
-    if(dataBuf == '\n')
+    if(*dataBuf == '\n')
     {
       printf("%i bytes read, buffer contains: %s\n", n, buf);
 
@@ -116,9 +116,9 @@ int main(int argc, char** argv)
       buf = "";
     }
 
-    ros::spinOnce();
+    //ros::spinOnce();
 
-    rate.sleep();
+    //rate.sleep();
   }
 
   return 0;
