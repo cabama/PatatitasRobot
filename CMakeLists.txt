@@ -131,7 +131,7 @@ include_directories(
 # add_dependencies(patatitas ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(patatitas_node src/patatitas_node.cpp)
+add_executable(encodersUltrasonidos_nodo src/publicador_encoders-ultrasonidos.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
