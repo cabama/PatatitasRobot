@@ -133,16 +133,16 @@ include_directories(
 # add_dependencies(patatitas ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(encodersUltrasonidos_nodo src/publicador_encoders-ultrasonidos.cpp)
+#add_executable(encodersUltrasonidos_nodo src/publicador_encoders-ultrasonidos.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(patatitas_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(encodersUltrasonidos_nodo
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(encodersUltrasonidos_nodo
+#  ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##
@@ -220,6 +220,9 @@ target_link_libraries(odometria ${catkin_LIBRARIES})
 # espeak
 add_executable(espeaktor src/subscriptor_speak.cpp)
 target_link_libraries(espeaktor ${catkin_LIBRARIES})
+# ENCODER-ULTRASONIDOS
+add_executable(encodersUltrasonidos_nodo src/publicador_encoders-ultrasonidos.cpp)
+target_link_libraries(encodersUltrasonidos_nodo ${catkin_LIBRARIES})
 # SLAM
 add_executable(slam src/slam.cpp)
 target_link_libraries(slam ${catkin_LIBRARIES})
