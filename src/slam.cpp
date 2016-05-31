@@ -1,6 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include <math>
+#include <cmath>
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/Pose2D.h>
@@ -63,7 +63,7 @@ void publica_mapa()
 	stamp.points(vertices);
 	const Point polyPoints[4] = { vertices[0], vertices[1], vertices[2], vertices[3] };
 
-	fillConvexPoly(draw_map, polyPoints, 4, BLUE);
+	fillConvexPoly(draw_map, polyPoints, 4, Scalar(255,0,0));
 
 	// Muestra el mapa
 	imshow("MAPA", draw_map);
