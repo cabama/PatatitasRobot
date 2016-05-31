@@ -215,3 +215,8 @@ target_link_libraries(gamepad_subscriptor ${catkin_LIBRARIES} lib_pwm)
 # Odometria
 add_executable(odometria src/odometria.cpp)
 target_link_libraries(odometria ${catkin_LIBRARIES})
+# espeak
+add_executable(espeaktor src/subscriptor_speak.cpp)
+target_link_libraries(espeaktor ${catkin_LIBRARIES})
+
+
