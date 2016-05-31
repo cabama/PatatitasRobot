@@ -8,7 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   sensor_msgs
+  geometry_msgs
   std_msgs
+  cv_bridge
   message_generation
 )
 
@@ -215,3 +217,9 @@ target_link_libraries(gamepad_subscriptor ${catkin_LIBRARIES} lib_pwm)
 # Odometria
 add_executable(odometria src/odometria.cpp)
 target_link_libraries(odometria ${catkin_LIBRARIES})
+# SLAM
+add_executable(slam src/slam.cpp)
+target_link_libraries(slam ${catkin_LIBRARIES})
+# espeak
+add_executable(espeaktor src/subscriptor_speak.cpp)
+target_link_libraries(espeaktor ${catkin_LIBRARIES})

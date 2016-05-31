@@ -178,7 +178,7 @@ int main(int argc, char** argv)
 
 	odometria_pub = nh.advertise<geometry_msgs::Pose2D>("odometria", 10);
 
-	ros::Subscriber encoders_sub = nh.subscribe("encoders", 10, encoders_callback);
+	ros::Subscriber encoders_sub = nh.subscribe("encoders_topic", 10, encoders_callback);
 	ros::Subscriber giro_sub = nh.subscribe("rumbo_giroscopio", 10, giro_callback);
 	ros::Subscriber gamepad_sub = nh.subscribe("gamepad", 10, gamepad_callback);
 

@@ -37,8 +37,8 @@ void split(const string& s, char c,
 int main(int argc, char** argv)
 {
   int fd, n, i;
-  char* buf;
-  char* dataBuf;
+  char* buf = (char*) malloc (100);
+  char dataBuf[1];
   struct termios toptions;
 
 
@@ -63,8 +63,8 @@ int main(int argc, char** argv)
   /* get current serial port settings */
   tcgetattr(fd, &toptions);
   /* set 9600 baud both ways */
-  cfsetispeed(&toptions, B115200);
-  cfsetospeed(&toptions, B115200);
+  cfsetispeed(&toptions, B9600);
+  cfsetospeed(&toptions, B9600);
   /* 8 bits, no parity, no stop bits */
   toptions.c_cflag &= ~PARENB;
   toptions.c_cflag &= ~CSTOPB;
@@ -77,34 +77,49 @@ int main(int argc, char** argv)
 
   //ros::Duration rate(1);
 
-  while(true)
+  int cont = 0;
+
+  while(ros::ok)
   {
     n = read(fd, dataBuf, 1);
 
-    buf += dataBuf[0];
+    buf[cont] = dataBuf[0];
+
+    cont++;
     /* insert terminating zero in the string */
     //buf[n] = 0;
+
+    //cout << "buf:" << dataBuf[0] << endl;
 
     /*dos primeros valores encodes, y 5 siguientes ultrasonidos*/
 
     if(*dataBuf == '\n')
     {
-      printf("%i bytes read, buffer contains: %s\n", n, buf);
+      buf[cont]=0;
+      //cout << "buffer: " << buf << endl;
+      //printf("%i bytes read, buffer contains: %s\n", cont, buf);
 
       std::string str = buf;
 
+      //cout << "str a hacer split:" << str << endl;
       vector<string> vectorString;
       split(str, ',', vectorString);
 
+      //cout << "sigo sin fallar" <<endl;
+
       //char* chars_array = strtok(buf, ",");
       int i=0;
+
+      msjEncoders.encoders.clear();
+      msjUltrasonidos.ultrasonidos.clear();
+
       while(i<vectorString.size())
       {
         cout << atof(vectorString[i].c_str()) << ", ";
         if(i<=1)
-          msjEncoders.encoders[i] = atof(vectorString[i].c_str());
+          msjEncoders.encoders.push_back(atof(vectorString[i].c_str()));
         else
-          msjUltrasonidos.ultrasonidos[i-2] = atof(vectorString[i].c_str());
+          msjUltrasonidos.ultrasonidos.push_back(atof(vectorString[i].c_str()));
         i++;
       }
 
@@ -113,7 +128,8 @@ int main(int argc, char** argv)
       publicadorEncoders.publish(msjEncoders); 
       publicadorUltrasonidos.publish(msjUltrasonidos);
       
-      buf = "";
+      buf = (char*) malloc (100);
+      cont = 0;
     }
 
     ros::spinOnce();
