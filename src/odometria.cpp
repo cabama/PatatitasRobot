@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math>
+#include <cmath>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Float32MultiArray.h>
@@ -60,8 +60,8 @@ void encoders_callback(const patatitas::encoders::ConstPtr& encoders_msg)
 	current_right_encoder_tics = encoders_msg->encoders[1];
 
 	// Diferencias de los encoders (avance en ticks de cada rueda)
-	int left_encoder_diff = last_left_encoder_tics - current_left_encoder_tics;
-	int right_encoder_diff = last_right_encoder_tics - current_right_encoder_tics;
+	int left_encoder_diff = current_left_encoder_tics - last_left_encoder_tics;
+	int right_encoder_diff = current_right_encoder_tics - last_right_encoder_tics;
 
 	// Comprobar el overflow de la variable.
 	if (left_encoder_diff < 0 || right_encoder_diff < 0)
@@ -82,17 +82,13 @@ void encoders_callback(const patatitas::encoders::ConstPtr& encoders_msg)
 	{
 		case  FORWARD:
 			// TODO: Calcular radio de giro
-			float avance_x = - avance * sin(header);
-			float avance_y = avance * cos(header);
-			x_pos += avance_x;
-			y_pos += avance_y;
+			x_pos += - avance * sin(header);
+			y_pos += avance * cos(header);
 			break;
 		case  BACKWARD:
 			// TODO
-			float avance_x = avance * sin(header);
-			float avance_y = - avance * cos(header);
-			x_pos += avance_x;
-			y_pos += avance_y;
+			x_pos += avance * sin(header);
+			y_pos += - avance * cos(header);
 			break;
 		case  LEFT:
 			// El robot no deberia avanzar. Gira sobre si mismo.
@@ -116,13 +112,15 @@ void encoders_callback(const patatitas::encoders::ConstPtr& encoders_msg)
 }
 
 // Callback del header del giroscopio
-void giro_callback(const patatitas::encoders::ConstPtr& gyro_msg)
+void giro_callback(const std_msgs::Float64::ConstPtr& gyro_msg)
 {
 	// Valor en bruto del giro. Sin filtrar ni acotar entre 0-360.
 	float gyro_raw = gyro_msg->data;
 
 	// Acotamos el valor entre 0-360
-	header = gyro_raw % 360;
+	while (gyro_raw >= 360) gyro_raw -= 360;
+	while (gyro_raw < 0) gyro_raw += 360;
+	header = gyro_raw;
 	publica_pose();
 }
 
