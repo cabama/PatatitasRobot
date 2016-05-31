@@ -16,6 +16,9 @@ using namespace cv;
 // Resolucion del mapa (metros / celda)
 #define CELL_SIZE 0.1
 
+// Tamaño del robot (metros)
+#define ROBOT_WIDTH 0.2
+#define ROBOT_LENGTH 0.35
 
 ros::Publisher map_pub;
 
@@ -28,22 +31,58 @@ ros::Publisher map_pub;
 #define UNKNOWN 100
 #define OBSTACLE 0
 #define FREE 255
-Mat map(MAP_WIDTH/CELL_SIZE, MAP_HEIGHT/CELL_SIZE, CV_8UC1, Scalar(UNKNOWN));
+Mat mapa(MAP_WIDTH/CELL_SIZE, MAP_HEIGHT/CELL_SIZE, CV_8UC1, Scalar(UNKNOWN));
 
 // Posicion del robot
 float x_pos = 0;
 float y_pos = 0;
 float header = 0;
 
-// Vector con las posiciones de los obstáculos (x,y)
-vector<Point2f> obstacles;
+// Parametros de la posicion de los ultrasonidos
+// Ángulos: -90, -45, 0, 45, 90. Senos y cosenos de cada uno precalculados
+float ultra_senos[5] = {1, 0.70710678, 0, -0.70710678, -1};
+float ultra_cosenos[5] = {0, 0.70710678, 1, 0.70710678, 0};
+// Distancias de cada sensor al centro del robot en x,y precalculadas (en metros)
+float ultra_x[5] = {0.07, 0.06, 0.0, -0.06, -0.07};
+float ultra_y[5] = {0.0, 0.12, 0.14, 0.12, 0.0};
+
+
+void publica_mapa()
+{
+	// Clona el mapa y pinta encima el robot
+	Mat draw_map = mapa.clone();
+	cvtColor(draw_map, draw_map, CV_GRAY2BGR);
+
+	// Dibuja un rectabgulo en la posicion del robot
+	RotatedRect stamp = RotatedRect(
+	    Point2f(x_pos / CELL_SIZE, y_pos / CELL_SIZE),
+	    Size2f(ROBOT_WIDTH / CELL_SIZE, ROBOT_LENGTH / CELL_SIZE),
+	    header
+	);
+	Point2f vertices[4];
+	stamp.points(vertices);
+	const Point polyPoints[4] = { vertices[0], vertices[1], vertices[2], vertices[3] };
+
+	fillConvexPoly(draw_map, polyPoints, 4, BLUE);
+
+	// Muestra el mapa
+	imshow("MAPA", draw_map);
+	// Publica la imagen
+	cv_bridge::CvImage img;
+    img.encoding = "bgr8";
+    img.header.stamp = ros::Time::now();
+    img.image = draw_map;
+    map_pub.publish(img.toImageMsg());
+}
+
+
 
 void odometria_callback(const geometry_msgs::Pose2D::ConstPtr& odom_msg)
 {
 	x_pos = odom_msg->x;
 	y_pos = odom_msg->y;
 	header = odom_msg->theta;
-
+	publica_mapa();
 }
 
 
@@ -53,7 +92,7 @@ void add_obstacle(float obstacle_pos_x, float obstacle_pos_y){
 	obstacle.x = (x_pos + obstacle_pos_x + MAP_WIDTH/2) / CELL_SIZE;
 	obstacle.y = - (y_pos + obstacle_pos_y - MAP_HEIGHT/2) / CELL_SIZE;
 
-	circle(map, obstacle, 3, Scalar(OBSTACLE), CV_FILLED);
+	circle(mapa, obstacle, 2, Scalar(OBSTACLE), CV_FILLED);
 }
 
 // Add a free line from the robot position to the obstacle in map coordinates
@@ -66,18 +105,24 @@ void add_free_line(float obstacle_pos_x, float obstacle_pos_y){
 	start_point.x = (x_pos + MAP_WIDTH/2) / CELL_SIZE;
 	start_point.y = - (y_pos - MAP_HEIGHT/2) / CELL_SIZE;
 
-    line(map, start_point, obstacle, Scalar(FREE), 2);
+    line(mapa, start_point, obstacle, Scalar(FREE), 2);
 }
 
 void ultrasonidos_callback(const patatitas::ultrasonidos::ConstPtr& ultrasonidos_msg)
 {
-	// Ángulos: -90, -45, 0, 45, 90
 	for (int i = 0; i < 5; ++i)
 	{
-		// Distancia del obstaculo al sensor en:
-		ultrasonidos_msg->ultrasonidos[i];
-		// TODO: Calcular posicion x,y real del obstaculo y pintar en el mapa
+		// Distancia del obstaculo al sensor (convertidas de cm a m)
+		float obs_distance = ultrasonidos_msg->ultrasonidos[i] / 100;
+		// Calcula la posicion x,y real del obstaculo respecto del robot
+		float obs_distance_x = obs_distance * ultra_senos[i] + ultra_x[i];
+		float obs_distance_y = obs_distance * ultra_cosenos[i] + ultra_y[i];
+		// Pinta la zona libre en el mapa
+		add_free_line(obs_distance_x, obs_distance_y);
+		// Pinta el obstáculo en el mapa
+		add_obstacle(obs_distance_x, obs_distance_y);
 	}
+	publica_mapa();
 }
 
 int main(int argc, char** argv)
