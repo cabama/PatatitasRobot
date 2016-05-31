@@ -39,7 +39,7 @@
  	short x;
  	short y;
  	short z;
- 	double angle;
+ 	float angle;
  };
 
 

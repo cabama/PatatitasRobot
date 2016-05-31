@@ -14,6 +14,7 @@ void funcionCallback(const  std_msgs::String::ConstPtr& msg)
 {
 	string command = "espeak -v es \"" + msg->data +"\" 2>/dev/null";
     system (command.c_str());
+    cout << msg->data << endl;
 }
 
 

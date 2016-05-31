@@ -36,7 +36,7 @@ CompassMsg HMC5883L::get_data(){
   lsb = wiringPiI2CReadReg8(id_i2c, HMC5883L_REG_LSB_Z);
   short z = msb << 8 | lsb;
   // Obtenemos el angulo en el plano X
-  double angle = atan2((double) y, (double)x) * (180 / PI);
+  float angle = atan2((float) y, (float)x) * (180 / PI);
   // Empaquetamos en la estructura
   CompassMsg msg;
   msg.x = x;
@@ -47,3 +47,13 @@ CompassMsg HMC5883L::get_data(){
   return msg;
 
 }
+
+/*
+  // Obtenemos el angulo en el plano X
+  float angle = atan2((float) y, (float) x);
+  if(angle < 0)
+    angle += 2*PI;
+  if(angle > 2*PI)
+    angle -= 2*PI;
+  angle = angle * 180/M_PI; 
+*/
