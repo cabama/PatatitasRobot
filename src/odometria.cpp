@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
-#include <std_msgs/Float32MultyArray.h>
+#include <std_msgs/Float32MultiArray.h>
 #include <patatitas/encoders.h>
 
 using namespace std;
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
 	ros::Subscriber encoders_sub = nh.subscribe("encoders", 10, encoders_callback);
 	ros::Subscriber giro_sub = nh.subscribe("rumbo_giroscopio", 10, giro_callback);
-	ros::Subscriber gamepad_sub = nodo.subscribe("gamepad", 10, gamepad_callback);
+	ros::Subscriber gamepad_sub = nh.subscribe("gamepad", 10, gamepad_callback);
 
 	ros::spin();
 

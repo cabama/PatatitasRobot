@@ -24,7 +24,7 @@ volatile uint32_t left_encoder_count = 0;
 volatile uint32_t right_encoder_count = 0;
 
 
-unsigned long distancia;
+float distancia;
 unsigned long tiempo;
 int i = 0;
 
@@ -61,9 +61,9 @@ void right_interrupt(){
 
 void loop() {
     
-    Serial.print(100);
+    Serial.print(left_encoder_count);
     Serial.print(",");
-    Serial.print(150);
+    Serial.print(right_encoder_count);
     Serial.print(",");
     
     digitalWrite(ULTRASOUND_1_OUT,LOW);
