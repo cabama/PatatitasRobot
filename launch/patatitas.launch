@@ -1,0 +1,9 @@
+<launch>
+	<node pkg="patatitas" name="gamepad" type="gamepad_subscriptor" output="screen"></node>
+	<node pkg="patatitas" name="acelerometro" type="acelerometro_publicador" output="screen"></node>
+	<node pkg="patatitas" name="espeak" type="espeaktor" output="screen"></node>
+	<node pkg="patatitas" name="music" type="music.py" output="screen"></node>
+	<node pkg="patatitas" name="encoders_ultra" type="encodersUltrasonidos_nodo" output="screen"></node>
+	<node pkg="patatitas" name="odometria" type="odometria" output="screen"></node>
+	<node pkg="patatitas" name="slam" type="slam" output="screen"></node>
+</launch>
