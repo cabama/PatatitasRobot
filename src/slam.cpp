@@ -17,8 +17,8 @@ using namespace cv;
 #define CELL_SIZE 0.1
 
 // Tamaño del robot (metros)
-#define ROBOT_WIDTH 0.2
-#define ROBOT_LENGTH 0.35
+#define ROBOT_WIDTH 0.3
+#define ROBOT_LENGTH 0.7
 
 ros::Publisher map_pub;
 
@@ -55,7 +55,7 @@ void publica_mapa()
 
 	// Dibuja un rectabgulo en la posicion del robot
 	RotatedRect stamp = RotatedRect(
-	    Point2f(x_pos / CELL_SIZE, y_pos / CELL_SIZE),
+	    Point2f((MAP_WIDTH/2 +  x_pos) / CELL_SIZE, (MAP_HEIGHT/2 - y_pos) / CELL_SIZE),
 	    Size2f(ROBOT_WIDTH / CELL_SIZE, ROBOT_LENGTH / CELL_SIZE),
 	    header
 	);
@@ -64,6 +64,9 @@ void publica_mapa()
 	const Point polyPoints[4] = { vertices[0], vertices[1], vertices[2], vertices[3] };
 
 	fillConvexPoly(draw_map, polyPoints, 4, Scalar(255,0,0));
+
+	// Resize para que sea "visible"
+	resize(draw_map, draw_map, Size(600,600));
 
 	// Muestra el mapa
 	imshow("MAPA", draw_map);
@@ -92,7 +95,13 @@ void add_obstacle(float obstacle_pos_x, float obstacle_pos_y){
 	obstacle.x = (x_pos + obstacle_pos_x + MAP_WIDTH/2) / CELL_SIZE;
 	obstacle.y = - (y_pos + obstacle_pos_y - MAP_HEIGHT/2) / CELL_SIZE;
 
-	circle(mapa, obstacle, 2, Scalar(OBSTACLE), CV_FILLED);
+	// Aplica una rotacion a los puntos de los obstaculos con respecto al centro del robot en funcion del header actual
+	Mat rot_mat = getRotationMatrix2D( Point((x_pos + MAP_WIDTH/2) / CELL_SIZE, (MAP_HEIGHT/2 - y_pos) / CELL_SIZE), header, 1);
+	Point rotated;
+	rotated.x = rot_mat.at<double>(0,0) * obstacle.x + rot_mat.at<double>(0,1) * obstacle.y + rot_mat.at<double>(0,2);
+    rotated.y = rot_mat.at<double>(1,0) * obstacle.x + rot_mat.at<double>(1,1) * obstacle.y + rot_mat.at<double>(1,2);
+
+	circle(mapa, rotated, 2, Scalar(OBSTACLE), CV_FILLED);
 }
 
 // Add a free line from the robot position to the obstacle in map coordinates
@@ -101,11 +110,17 @@ void add_free_line(float obstacle_pos_x, float obstacle_pos_y){
 	obstacle.x = (x_pos + obstacle_pos_x + MAP_WIDTH/2) / CELL_SIZE;
 	obstacle.y = - (y_pos + obstacle_pos_y - MAP_HEIGHT/2) / CELL_SIZE;
 
+	// Aplica una rotacion a los puntos de los obstaculos con respecto al centro del robot en funcion del header actual
+	Mat rot_mat = getRotationMatrix2D( Point((x_pos + MAP_WIDTH/2) / CELL_SIZE, (MAP_HEIGHT/2 - y_pos) / CELL_SIZE), header, 1);
+	Point rotated;
+	rotated.x = rot_mat.at<double>(0,0) * obstacle.x + rot_mat.at<double>(0,1) * obstacle.y + rot_mat.at<double>(0,2);
+    rotated.y = rot_mat.at<double>(1,0) * obstacle.x + rot_mat.at<double>(1,1) * obstacle.y + rot_mat.at<double>(1,2);
+
     Point start_point;
 	start_point.x = (x_pos + MAP_WIDTH/2) / CELL_SIZE;
 	start_point.y = - (y_pos - MAP_HEIGHT/2) / CELL_SIZE;
 
-    line(mapa, start_point, obstacle, Scalar(FREE), 2);
+    line(mapa, start_point, rotated, Scalar(FREE), 2);
 }
 
 void ultrasonidos_callback(const patatitas::ultrasonidos::ConstPtr& ultrasonidos_msg)
@@ -117,6 +132,7 @@ void ultrasonidos_callback(const patatitas::ultrasonidos::ConstPtr& ultrasonidos
 		// Calcula la posicion x,y real del obstaculo respecto del robot
 		float obs_distance_x = obs_distance * ultra_senos[i] + ultra_x[i];
 		float obs_distance_y = obs_distance * ultra_cosenos[i] + ultra_y[i];
+
 		// Pinta la zona libre en el mapa
 		add_free_line(obs_distance_x, obs_distance_y);
 		// Pinta el obstáculo en el mapa
