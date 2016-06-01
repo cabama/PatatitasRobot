@@ -31,7 +31,7 @@ def listener():
     '''
     # Create a subscriber with appropriate topic, custom message and name of
     # callback function.
-    rospy.Subscriber(topic_speak, NodeExampleData, callback)
+    rospy.Subscriber(topic_speak, String, callback)
     # Wait for messages on topic, go to callback function when new messages
     # arrive.
     rospy.spin()
