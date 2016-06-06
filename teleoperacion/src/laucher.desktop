@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=PatatitasGUI
+Comment=Programa basado en pyqt y opencv
+Exec=bash -c "source /opt/ros/indigo/setup.bash && source /home/parallels/.ros_bashrc && /media/psf/catkin/src/patatitas/src/main_window.py"
+Icon=/media/psf/catkin/src/patatitas/src/lib_windows/resources/icon.png
+Path=/media/psf/catkin/src/patatitas/src/
+Terminal=true
+Type=Application
+Categories=Utility;Application;
+
